@@ -1,5 +1,7 @@
 import typer
+import pytest
 import uvicorn
+import subprocess
 
 app = typer.Typer(
     help="cli tool stuff thing",
@@ -11,12 +13,17 @@ app = typer.Typer(
 @app.command(help="Serve the main uvicorn application")
 def runserver(prod: bool = typer.Option(
     False, help="Use production server with workers")):
-    uvicorn.run("app:app", host='127.0.0.1', port=8000, reload=not prod)
+    uvicorn.run("app.app:app", host='127.0.0.1', port=8000, reload=not prod)
 
 
 @app.command()
 def makemigrations(name: str):
     print('Hello', name)
+
+
+@app.command(help="Run unit tests on all models")
+def test():
+    subprocess.call(['pytest', '--no-header', '--verbose'])
 
 
 if __name__ == '__main__':
