@@ -60,6 +60,14 @@ class TeamUpdate(SQLModel):
     headquarters: str | None = None
 
 
+class HeroReadWithTeam(HeroRead):
+    team: TeamRead | None = None
+
+
+class TeamReadWithHeroes(TeamRead):
+    heroes: list[HeroRead] = []
+
+
 # ------------ FastAPI App Instance ------------ #
 
 postgres_url = f'postgresql://user:pass@localhost:5432/fastapi_dev'
@@ -95,6 +103,7 @@ def on_startup():
 
 @app.get("/heroes", response_model=list[HeroRead])
 def get_heroes(
+        *,
         offset: int = 0,
         limit: int = Query(default=100, ge=0, le=100),
         session: Session = Depends(get_session),
@@ -113,7 +122,7 @@ def create_hero(*, session: Session = Depends(get_session), hero: HeroCreate):
     return db_hero
 
 
-@app.get("/heros/{hero_id}", response_model=HeroRead)
+@app.get("/heros/{hero_id}", response_model=HeroReadWithTeam)
 def get_hero(
         *,
         hero_id: int,
@@ -187,7 +196,7 @@ def create_team(
     return team
 
 
-@app.get("/teams/{team_id}")
+@app.get("/teams/{team_id}", response_model=TeamReadWithHeroes)
 def get_team(
         *,
         team_id: int,
@@ -213,7 +222,7 @@ def delete_team(
     return {"ok", True}
 
 
-@app.patch("/teams/{team_id}")
+@app.patch("/teams/{team_id}", response_model=TeamRead)
 def update_team(
         *,
         team_id: int,
