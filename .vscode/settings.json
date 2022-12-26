@@ -1,0 +1,7 @@
+{
+  "python.terminal.activateEnvironment": false,
+  "python.formatting.yapfPath": "~/.local/bin/yapf",
+  "material-icon-theme.files.associations": {
+    "*.test.py": "test-js"
+  }
+}
