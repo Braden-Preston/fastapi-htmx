@@ -1,7 +1,7 @@
 from fastapi import Header, HTTPException
 from sqlmodel import Session
 
-from .database import engine, create_db_and_tables
+from .database import engine
 
 
 async def get_token_header(x_token: str = Header()):

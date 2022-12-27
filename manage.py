@@ -13,7 +13,7 @@ app = typer.Typer(
 @app.command(help="Serve the main uvicorn application")
 def runserver(prod: bool = typer.Option(
     False, help="Use production server with workers")):
-    uvicorn.run("app.app:app", host='127.0.0.1', port=8000, reload=not prod)
+    uvicorn.run("app:app", host='127.0.0.1', port=8000, reload=not prod)
 
 
 @app.command()
